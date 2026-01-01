@@ -13,7 +13,9 @@ Public Class DbHelper
         Dim dt As New DataTable
         Using con As OleDbConnection = GetConnection()
             Using cmd As New OleDbCommand(sql, con)
-                If params IsNot Nothing Then cmd.Parameters.AddRange(params.ToArray())
+                If params IsNot Nothing Then
+                    cmd.Parameters.AddRange(params.ToArray())
+                End If
                 Using da As New OleDbDataAdapter(cmd)
                     da.Fill(dt)
                 End Using
@@ -21,6 +23,7 @@ Public Class DbHelper
         End Using
         Return dt
     End Function
+
 
     Public Shared Sub ExecuteNonQuery(sql As String, Optional params As List(Of OleDbParameter) = Nothing)
         Using con As OleDbConnection = GetConnection()
@@ -31,5 +34,16 @@ Public Class DbHelper
             End Using
         End Using
     End Sub
+    Public Shared Function ExecuteScalar(sql As String, Optional params As List(Of OleDbParameter) = Nothing) As Object
+        Using con As OleDbConnection = GetConnection()
+            Using cmd As New OleDbCommand(sql, con)
+                If params IsNot Nothing Then
+                    cmd.Parameters.AddRange(params.ToArray())
+                End If
+                con.Open()
+                Return cmd.ExecuteScalar()
+            End Using
+        End Using
+    End Function
 
 End Class

@@ -15,10 +15,20 @@ Public Class AdminForm
 
     End Sub
 
+
+
     Private Sub LoadCrew()
-        Dim dt = DbHelper.ExecuteQuery("SELECT CrewID, FullName, Email, Rank FROM Crew")
+        Dim dt = DbHelper.ExecuteQuery("SELECT CrewID, FullName, Email, Rank FROM Crew WHERE IsActive=True")
         dgvCrew.DataSource = dt
+
+        If dgvCrew.Rows.Count > 0 Then
+            dgvCrew.ClearSelection()
+            dgvCrew.Rows(0).Selected = True
+        End If
     End Sub
+
+
+
     Private Sub btnAdd_Click(sender As Object, e As EventArgs) Handles btnAdd.Click
 
         If txtName.Text.Trim() = "" Then
@@ -40,12 +50,27 @@ Public Class AdminForm
     End Sub
 
     Private Sub dgvCrew_CellContentClick(sender As Object, e As DataGridViewCellEventArgs) Handles dgvCrew.CellContentClick
-        If e.RowIndex < 0 Then Return
+        Try
+            If dgvCrew.CurrentRow Is Nothing Then Return
+            If dgvCrew.CurrentRow.IsNewRow Then Return
 
-        selectedCrewID = CInt(dgvCrew.Rows(e.RowIndex).Cells("CrewID").Value)
-        txtName.Text = dgvCrew.Rows(e.RowIndex).Cells("FullName").Value.ToString()
-        txtEmail.Text = dgvCrew.Rows(e.RowIndex).Cells("Email").Value.ToString()
-        cbRank.Text = dgvCrew.Rows(e.RowIndex).Cells("Rank").Value.ToString()
+            selectedCrewID = CInt(dgvCrew.CurrentRow.Cells("CrewID").Value)
+            txtName.Text = dgvCrew.CurrentRow.Cells("FullName").Value.ToString()
+            txtEmail.Text = dgvCrew.CurrentRow.Cells("Email").Value.ToString()
+            cbRank.Text = dgvCrew.CurrentRow.Cells("Rank").Value.ToString()
+        Catch
+            ' تجاهل لو الصف فاضي أو البيانات غير جاهزة
+        End Try
+    End Sub
+    Private Sub dgvCrew_SelectionChanged(sender As Object, e As EventArgs) Handles dgvCrew.SelectionChanged
+        If dgvCrew.CurrentRow Is Nothing Then Return
+        If dgvCrew.CurrentRow.IsNewRow Then Return
+
+        selectedCrewID = CInt(dgvCrew.CurrentRow.Cells("CrewID").Value)
+
+        txtName.Text = dgvCrew.CurrentRow.Cells("FullName").Value.ToString()
+        txtEmail.Text = dgvCrew.CurrentRow.Cells("Email").Value.ToString()
+        cbRank.Text = dgvCrew.CurrentRow.Cells("Rank").Value.ToString()
     End Sub
 
     Private Sub btnLoad_Click(sender As Object, e As EventArgs) Handles btnLoad.Click
@@ -53,29 +78,22 @@ Public Class AdminForm
     End Sub
 
     Private Sub btnDelete_Click(sender As Object, e As EventArgs) Handles btnDelete.Click
-        If selectedCrewID = 0 Then
+        If dgvCrew.CurrentRow Is Nothing Then
             MessageBox.Show("اختار موظف من الجدول أولاً")
             Return
         End If
 
-        If MessageBox.Show("متأكد تبي تحذف؟", "تأكيد", MessageBoxButtons.YesNo) = DialogResult.No Then
-            Return
-        End If
+        Dim crewId As Integer = CInt(dgvCrew.CurrentRow.Cells("CrewID").Value)
 
-        Dim sql As String = "DELETE FROM Crew WHERE CrewID=?"
-        Dim p As New List(Of OleDbParameter) From {
-            New OleDbParameter("@p1", selectedCrewID)
-        }
+        Dim sql As String = "UPDATE Crew SET IsActive=False WHERE CrewID=?"
+        Dim p As New List(Of OleDb.OleDbParameter) From {
+        New OleDb.OleDbParameter("@p1", crewId)
+    }
 
         DbHelper.ExecuteNonQuery(sql, p)
-        MessageBox.Show("تم الحذف ✅")
 
-        selectedCrewID = 0
-        txtName.Clear()
-        txtEmail.Clear()
-        cbRank.SelectedIndex = -1
-
-        LoadCrew()
+        MessageBox.Show("تم تعطيل الموظف ✅")
+        LoadCrew() ' دالة تحديث الجدول عندك
     End Sub
 
     Private Sub btnUpdate_Click(sender As Object, e As EventArgs) Handles btnUpdate.Click
@@ -110,13 +128,14 @@ Public Class AdminForm
             Return
         End If
 
-        Dim sql As String = "INSERT INTO Users (Username, [Password], Role, CrewID) VALUES (?,?,?,?)"
+        Dim sql As String = "INSERT INTO Crew (FullName, Email, Rank, IsActive) VALUES (?,?,?,?)"
         Dim p As New List(Of OleDbParameter) From {
-            New OleDbParameter("@p1", txtUsername.Text.Trim()),
-            New OleDbParameter("@p2", txtUserPass.Text.Trim()),
-            New OleDbParameter("@p3", "Crew"),
-            New OleDbParameter("@p4", selectedCrewID)
-        }
+        New OleDbParameter("@p1", txtName.Text.Trim()),
+        New OleDbParameter("@p2", txtEmail.Text.Trim()),
+        New OleDbParameter("@p3", cbRank.Text.Trim()),
+        New OleDbParameter("@p4", True)
+}
+
 
         DbHelper.ExecuteNonQuery(sql, p)
         MessageBox.Show("تم إنشاء الحساب ✅")

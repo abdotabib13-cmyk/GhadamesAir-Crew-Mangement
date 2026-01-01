@@ -1,0 +1,13 @@
+D:\visual basic\GhadamesCrewSystem\GhadamesCrewSystem\bin\Debug\GhadamesCrewSystem.exe.config
+D:\visual basic\GhadamesCrewSystem\GhadamesCrewSystem\bin\Debug\GhadamesCrewSystem.exe
+D:\visual basic\GhadamesCrewSystem\GhadamesCrewSystem\bin\Debug\GhadamesCrewSystem.pdb
+D:\visual basic\GhadamesCrewSystem\GhadamesCrewSystem\bin\Debug\GhadamesCrewSystem.xml
+D:\visual basic\GhadamesCrewSystem\GhadamesCrewSystem\obj\Debug\GhadamesCrewSystem.vbproj.AssemblyReference.cache
+D:\visual basic\GhadamesCrewSystem\GhadamesCrewSystem\obj\Debug\GhadamesCrewSystem.vbproj.SuggestedBindingRedirects.cache
+D:\visual basic\GhadamesCrewSystem\GhadamesCrewSystem\obj\Debug\GhadamesCrewSystem.Form1.resources
+D:\visual basic\GhadamesCrewSystem\GhadamesCrewSystem\obj\Debug\GhadamesCrewSystem.Resources.resources
+D:\visual basic\GhadamesCrewSystem\GhadamesCrewSystem\obj\Debug\GhadamesCrewSystem.vbproj.GenerateResource.cache
+D:\visual basic\GhadamesCrewSystem\GhadamesCrewSystem\obj\Debug\GhadamesCrewSystem.vbproj.CoreCompileInputs.cache
+D:\visual basic\GhadamesCrewSystem\GhadamesCrewSystem\obj\Debug\GhadamesCrewSystem.exe
+D:\visual basic\GhadamesCrewSystem\GhadamesCrewSystem\obj\Debug\GhadamesCrewSystem.xml
+D:\visual basic\GhadamesCrewSystem\GhadamesCrewSystem\obj\Debug\GhadamesCrewSystem.pdb
